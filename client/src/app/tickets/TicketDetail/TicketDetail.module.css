@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+.left-side {
+  flex: 2;
+  gap: 4px;
+}
+
+.left-side_code {
+  display: flex;
+}
+
+.left-side_des {
+  border: 1px solid lightgray;
+}
+
+.right-side {
+  flex: 1;
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}

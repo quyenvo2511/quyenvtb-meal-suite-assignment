@@ -1,0 +1,14 @@
+.search {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.no-option {
+  padding: 8px;
+  color: #888;
+  text-align: center;
+}

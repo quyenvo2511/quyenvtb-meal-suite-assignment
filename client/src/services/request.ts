@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 import { HTTP_METHOD, HttpMethod } from "../constants/httpMethod";
-import { encodeQuery } from "../utils/string";
 
 const BASE_URL = "http://localhost:3333/api";
 
@@ -14,27 +13,31 @@ export const request = async (
     method: HTTP_METHOD[method],
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
   };
 
-  const reqData =
-    method === HTTP_METHOD.GET || method === HTTP_METHOD.DELETE
-      ? { params: options }
-      : { body: options };
-
-  // Now process based on what reqData contains
-  if (reqData.params) {
-    const queryString = encodeQuery(reqData.params);
-    url += `?${queryString}`;
+  // Process query params for GET and DELETE requests
+  if (options?.params) {
+    const queryString = new URLSearchParams(options.params).toString();
+    if (queryString) {
+      url += `?${queryString}`;
+    }
   }
 
-  if (reqData.body) {
-    instanceFetching.body = JSON.stringify(reqData.body);
+  // Process body for POST, PUT, DELETE
+  if (options?.body) {
+    instanceFetching.body = JSON.stringify(options.body);
   }
+
   try {
     const response = await fetch(url, instanceFetching);
 
-    if (response.status === 200) {
+    if (response.status === 204) {
+      // No Content, return null or an empty object as appropriate
+      return null;
+    } else if (response.status >= 200 && response.status < 300) {
+      // Successful response with content
       const result = await response.json();
       return result;
     } else if (response.status >= 400) {

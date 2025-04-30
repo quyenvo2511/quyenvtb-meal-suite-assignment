@@ -8,14 +8,14 @@ const App = () => {
   // responsive
   useLayoutEffect(() => {
     const updateFontSize = () => {
-      const maxWidth = 1440;
-      const minWidth = 320;
+      const maxWidth = 1920;
+      const minWidth = 1420;
 
       const innerWidth = Math.max(
         minWidth,
         Math.min(window.innerWidth, maxWidth)
       );
-      const baseWidth = 375;
+      const baseWidth = 1420;
       const vw = innerWidth / baseWidth;
 
       document.documentElement.style.fontSize = `${vw * 16}px`;
@@ -28,11 +28,6 @@ const App = () => {
   }, []);
   return (
     <div className={styles["app"]}>
-      {/* <Routes> */}
-      {/* <Route path="/" element={<Tickets tickets={tickets} />} /> */}
-      {/* Hint: Try `npx nx g component TicketDetails --project=client --no-export` to generate this component  */}
-      {/* <Route path="/:id" element={<h2>Details Not Implemented</h2>} /> */}
-      {/* </Routes> */}
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>{configRoutes(routes)}</Routes>
       </Suspense>

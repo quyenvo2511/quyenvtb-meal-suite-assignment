@@ -1,2 +1,24 @@
-.tickets {
+.ticket-item-container {
+  border: 1px solid gray;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.ticket-item-container_des {
+  margin: 0rem;
+  display: flex;
+  flex: 3;
+}
+
+.ticket-item-container_status {
+  flex: 1;
+}
+.ticket-item-container_assignee {
+  flex: 1;
 }
