@@ -1,12 +1,31 @@
-import { Route } from "react-router-dom";
+import { Route, RouteObject } from "react-router-dom";
 
-export interface IRouteConfig {
-  path: string;
-  element: JSX.Element;
-}
+export type TRouteConfig = RouteObject;
 
-export const configRoutes = (routes: IRouteConfig[]) => {
-  return routes.map((route) => (
-    <Route key={route.path} path={route.path} element={route.element} />
-  ));
+export const configRoutes = (routes: TRouteConfig[]) => {
+  return routes.map((route) => {
+    if (route.children && route.children.length > 0) {
+      return (
+        <Route key={route.path} path={route.path} element={route.element}>
+          {route.children.map((childRoute) => (
+            <Route
+              key={`${route.path}-${childRoute.path ?? "index"}`}
+              path={childRoute.path}
+              element={childRoute.element}
+              index={childRoute.index}
+            />
+          ))}
+        </Route>
+      );
+    }
+
+    return (
+      <Route
+        key={route.path ?? "index"}
+        path={route.path}
+        element={route.element}
+        index={route.index}
+      />
+    );
+  });
 };
