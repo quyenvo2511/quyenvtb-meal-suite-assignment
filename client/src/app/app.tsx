@@ -3,6 +3,7 @@ import { Routes } from "react-router-dom";
 import { configRoutes } from "../config/routeConfig";
 import styles from "./app.module.css";
 import { routes } from "./routes";
+import LoadingSpin from "../components/LoadingSpin/LoadingSpin";
 
 const App = () => {
   // responsive
@@ -28,7 +29,7 @@ const App = () => {
   }, []);
   return (
     <div className={styles["app"]}>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<LoadingSpin />}>
         <Routes>{configRoutes(routes)}</Routes>
       </Suspense>
     </div>

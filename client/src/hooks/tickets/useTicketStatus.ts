@@ -3,19 +3,20 @@ import {
   markTicketTodo,
 } from "client/src/services/tickets.services";
 import { TMarkTicketRequest } from "client/src/types/tickets.model";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TicketWithAssignee } from "./useTickets";
+import { ticketOptions } from "client/src/constants/ticket.constants";
 
 export const useTicketStatus = (
   ticket: TicketWithAssignee | null,
   id: number
 ) => {
   const [updating, setUpdating] = useState(false);
-  const [localCompleted, setLocalCompleted] = useState<boolean | null>(null);
+  const [completed, setCompleted] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (ticket) {
-      setLocalCompleted(ticket.completed);
+      setCompleted(ticket.completed);
     }
   }, [ticket]);
 
@@ -25,11 +26,11 @@ export const useTicketStatus = (
   }) => {
     if (!ticket) return;
 
-    const previousStatus = localCompleted;
+    const previousStatus = completed;
     const optimisticStatus = selected.value;
 
     // Optimistically update
-    setLocalCompleted(optimisticStatus);
+    setCompleted(optimisticStatus);
     setUpdating(true);
 
     try {
@@ -41,17 +42,29 @@ export const useTicketStatus = (
       }
     } catch (error) {
       // Revert if failed
-      setLocalCompleted(previousStatus);
+      setCompleted(previousStatus);
       console.error("Failed to update ticket status", error);
     } finally {
       setUpdating(false);
     }
   };
 
+  const selectedStatus = useMemo(() => {
+    return (
+      ticketOptions.find((opt) => opt.value === completed) ?? ticketOptions[1]
+    );
+  }, [completed]);
+
+  const filteredTicketOptions = useMemo(() => {
+    return ticketOptions.filter((opt) => opt.value !== selectedStatus.value);
+  }, [selectedStatus]);
+
   return {
     ticket,
     loading: updating,
-    completed: localCompleted, // use local completed
+    completed: completed, // use local completed
+    filteredTicketOptions,
+    selectedStatus,
     handleChangeStatus,
   };
 };

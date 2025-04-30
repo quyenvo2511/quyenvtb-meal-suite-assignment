@@ -8,7 +8,8 @@ import {
   TTicketDetailRequest,
   TUseCreateTicket,
 } from "client/src/types/tickets.model";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 export interface TicketWithAssignee extends Ticket {
   assigneeName?: string;
 }
@@ -16,21 +17,22 @@ export interface TicketWithAssignee extends Ticket {
 export const useListTicket = (completedFilter: boolean | null) => {
   const [tickets, setTickets] = useState<TicketWithAssignee[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const fetchTickets = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const data = await getListTicket();
       if (data) {
-        // Filter tickets based on completedFilter
-        const filteredTickets = completedFilter
-          ? data.filter((ticket) => ticket.completed === completedFilter)
-          : data; // If no filter, return all tickets
-
-        setTickets(filteredTickets);
+        const filtered =
+          completedFilter === null
+            ? data
+            : data.filter((ticket) => ticket.completed === completedFilter);
+        setTickets(filtered);
       }
     } finally {
       setLoading(false);
+      setIsFirstLoad(false); // sau khi lần load đầu xong thì flag này sẽ false
     }
   };
 
@@ -38,7 +40,7 @@ export const useListTicket = (completedFilter: boolean | null) => {
     fetchTickets();
   }, [completedFilter]);
 
-  return { tickets, loading, refetch: fetchTickets };
+  return { tickets, loading, isFirstLoad, refetch: fetchTickets };
 };
 
 export const useCreateTicket = (onCreated?: () => void): TUseCreateTicket => {
@@ -51,12 +53,20 @@ export const useCreateTicket = (onCreated?: () => void): TUseCreateTicket => {
     setDescription("");
   };
 
-  const submitCreate = async () => {
-    if (description.trim() === "") return;
-    await createATicket({ description });
-    cancelCreating();
-    onCreated?.();
-  };
+  const submitCreate = useCallback(async () => {
+    if (description.trim() === "" || isCreating) return;
+
+    setIsCreating(true);
+    try {
+      await createATicket({ description });
+      cancelCreating();
+      onCreated?.();
+      toast.success("You just created a ticket successful!");
+    } catch (error) {
+      console.error("Failed to create ticket:", error);
+      setIsCreating(false);
+    }
+  }, [description, isCreating, onCreated]);
 
   return {
     isCreating,
