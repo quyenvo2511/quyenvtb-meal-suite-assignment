@@ -31,6 +31,10 @@ type TUseCreateTicket = {
 type TOption = {
   label: string;
   value: any;
+  textMainColor?: string;
+  textReverseColor?: string;
+  bgColor?: string;
+  display?: React.ReactNode;
 };
 
 export {

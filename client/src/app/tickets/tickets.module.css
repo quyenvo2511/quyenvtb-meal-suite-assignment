@@ -1,13 +1,67 @@
+.header {
+  position: sticky;
+  top: 0;
+  background: var(--ds-background-white, white);
+  z-index: 3;
+  border-bottom: var(--spacing-xs, 0.1rem) solid
+    var(--ds-background-prepare-option, #e1dfde);
+}
+
+.header_page-title {
+  margin: 0;
+  padding: var(--spacing-xl, 1rem);
+
+  background-color: var(--ds-background-container, #d8cfd1);
+}
+
+.content {
+  padding: var(--spacing-xl, 1rem);
+}
+
+.select-dropdown {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: var(--spacing-xl, 1rem);
+}
+
+.select-dropdown_indicator {
+  align-self: flex-end;
+}
+
+.select-dropdown_list {
+  width: max-content;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: var(--sizing-m, 2rem);
+
+  padding-inline: var(--sizing-m, 2rem);
+  padding-block: var(--spacing-sm, 0.5rem);
+
+  background-color: var(--ds-background-secondary, #d2c7ef);
+  color: var(--ds-text-white, white);
+}
+
 .ticket-item-container {
-  border: 1px solid gray;
+  border: 1px solid var(--ds-background-prepare-option, #e1dfde);
   border-radius: 8px;
-  padding: 12px;
+  padding: var(--spacing-ml, 0.8rem);
   cursor: pointer;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 2rem;
+  align-items: center;
+  gap: var(--sizing-m, 2rem);
+}
+
+.ticket-item-container:hover {
+  background-color: var(--ds-background-secondary, #d2c7ef);
 }
 
 .ticket-item-container_des {
@@ -21,4 +75,33 @@
 }
 .ticket-item-container_assignee {
   flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 0.5rem);
+}
+
+.ticket-item-create {
+  border: 1px solid gray;
+  border-radius: 8px;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  padding: var(--spacing-xl, 1rem);
+  margin-top: var(--spacing-sm, 0.5rem);
+
+  position: sticky;
+  bottom: 0;
+  background-color: var(--ds-background-white, white);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.input-create {
+  flex: 1;
+  border: none;
+  outline: none;
+
+  font-size: var(--font-size-s, 1rem);
 }

@@ -1,6 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
-html {
+html,
+body {
   font-family: "Poppins", sans-serif;
+  padding: 0px;
+  margin: 0px;
+}
+
+:root {
+  --ds-border: #bfbaba;
+  --ds-border-selected: #0c66e4;
+
+  --ds-text-white: white;
+  --ds-text-secondary: #777272;
+  --ds-text-prepare-option: #434140;
+  --ds-text-success: #53c453;
+
+  --ds-background-disabled: #091e420f;
+  --ds-background-prepare-option: #e1dfde;
+  --ds-background-success: #c5eac3;
+  --ds-background-container: #d8cfd1;
+  --ds-background-secondary: #d2c7ef;
+  --ds-background-white: white;
+
+  --spacing-xs: 0.1rem;
+  --spacing-s: 0.3rem;
+  --spacing-sm: 0.5rem;
+  --spacing-m: 0.7rem;
+  --spacing-ml: 0.8rem;
+  --spacing-l: 0.9rem;
+  --spacing-xl: 1rem;
+
+  --sizing-s: 1rem;
+  --sizing-m: 2rem;
+  --sizing-l: 3rem;
+
+  --font-size-s: 1rem;
+  --font-size-m: 1.2rem;
 }
 
 .text-ellipsis {
