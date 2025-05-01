@@ -28,6 +28,7 @@ const TicketItem = ({ item }: ITicketItemProps) => {
           "text-ellipsis"
         )}
         title={`Go to see detail of TICKET-${item.id}`}
+        data-testid="ticket-item"
       >
         TICKET-{item.id}
       </p>
@@ -41,7 +42,7 @@ const TicketItem = ({ item }: ITicketItemProps) => {
         className={styles["ticket-item-container_status"]}
         title={selectedStatus.label}
       >
-        {selectedStatus.label}
+        {selectedStatus.display}
       </div>
       <div
         className={styles["ticket-item-container_assignee"]}
@@ -52,7 +53,7 @@ const TicketItem = ({ item }: ITicketItemProps) => {
           size="30px"
           name={item.assigneeName ?? "Unassign"}
         />{" "}
-        {item.assigneeName ?? "Unassign"}
+        {item.assigneeName}
       </div>
     </div>
   );

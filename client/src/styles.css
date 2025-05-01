@@ -11,6 +11,7 @@ body {
   --ds-border-selected: #0c66e4;
 
   --ds-text-white: white;
+  --ds-text-bold: #a451dc;
   --ds-text-secondary: #777272;
   --ds-text-prepare-option: #434140;
   --ds-text-success: #53c453;
@@ -36,6 +37,7 @@ body {
   --sizing-m: 2rem;
   --sizing-l: 3rem;
 
+  --font-size-xs: 0.8rem;
   --font-size-s: 1rem;
   --font-size-m: 1.2rem;
 }
@@ -45,4 +47,11 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.ava-user-container {
+  display: flex;
+  align-items: center;
+
+  gap: var(--spacing-m);
 }

@@ -86,11 +86,12 @@ const SelectDropdown: React.FC<TSelectDropdownProps> = ({
   return (
     <div className={styles["dropdown"]} ref={dropdownRef}>
       <button
+        data-testid="status-filter-button"
         className={styles["button-select"]}
         onClick={handleToggle}
         type="button"
       >
-        <span>{value?.label ?? placeholder}</span>
+        <span>{value?.display ?? placeholder}</span>
         <span className={styles["icon"]}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -137,8 +138,9 @@ const SelectDropdown: React.FC<TSelectDropdownProps> = ({
                 className={styles["option"]}
                 onClick={() => handleSelect(item)}
                 role="button"
+                data-testid={`filter-${item.label.toLowerCase()}`}
               >
-                <p>{item.label}</p>
+                <p>{item.display ?? item.label}</p>
               </div>
             )}
             ListEmptyComponent={

@@ -3,7 +3,7 @@ import { TRouteConfig } from "../config/routeConfig";
 import { ROUTING_PATHS } from "../config/routing";
 import TicketDetail from "./tickets/TicketDetail";
 import Tickets from "./tickets/tickets";
-import { UserProvider } from "../providers/userContext";
+import { UserProvider } from "../providers/UserContext";
 
 const TicketsLayout = () => {
   return <Outlet />;

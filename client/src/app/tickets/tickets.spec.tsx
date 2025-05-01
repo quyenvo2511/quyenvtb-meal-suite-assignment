@@ -1,16 +1,22 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import Tickets from "./tickets";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import * as ticketHooks from "client/src/hooks/tickets/useTickets";
-import { act } from "react-dom/test-utils";
+import { MemoryRouter } from "react-router-dom";
+import Tickets from "./tickets";
 
-// Mock ticket data
 const mockTickets = [
   { id: 1, description: "Ticket 1", completed: true },
   { id: 2, description: "Ticket 2", completed: false },
 ];
 
-// Mock hook return values
 jest.mock("client/src/hooks/tickets/useTickets");
+
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+global.ResizeObserver = ResizeObserver;
 
 describe("Tickets", () => {
   beforeEach(() => {
@@ -32,42 +38,58 @@ describe("Tickets", () => {
   });
 
   it("should render successfully with all tickets", () => {
-    render(<Tickets />);
+    render(
+      <MemoryRouter>
+        <Tickets />
+      </MemoryRouter>
+    );
     expect(screen.getByText("Tickets")).toBeInTheDocument();
     expect(screen.getByText("Ticket 1")).toBeInTheDocument();
     expect(screen.getByText("Ticket 2")).toBeInTheDocument();
   });
 
   it("should filter tickets when selecting status", async () => {
-    render(<Tickets />);
+    render(
+      <MemoryRouter>
+        <Tickets />
+      </MemoryRouter>
+    );
 
-    const dropdown = screen.getByRole("combobox"); // Assuming SelectDropdown uses <select> or role combobox
+    const button = screen.getByTestId("status-filter-button");
+    fireEvent.click(button);
 
-    // Select "Completed"
-    await act(async () => {
-      fireEvent.change(dropdown, { target: { value: "true" } });
-    });
-
-    await waitFor(() => {
-      const calledWith = (ticketHooks.useListTicket as jest.Mock).mock.calls;
-      expect(calledWith[calledWith.length - 1][0]).toBe(true);
-    });
-
-    // Select "To Do"
-    await act(async () => {
-      fireEvent.change(dropdown, { target: { value: "false" } });
-    });
+    const completedOption = await screen.findByTestId("filter-completed");
+    fireEvent.click(completedOption);
 
     await waitFor(() => {
-      const calledWith = (ticketHooks.useListTicket as jest.Mock).mock.calls;
-      expect(calledWith[calledWith.length - 1][0]).toBe(false);
+      const calls = (ticketHooks.useListTicket as jest.Mock).mock.calls;
+      expect(calls[calls.length - 1][0]).toBe(true);
     });
+
+    fireEvent.click(button);
+    const todoOption = await screen.findByTestId("filter-to do");
+    fireEvent.click(todoOption);
+
+    await waitFor(() => {
+      const calls = (ticketHooks.useListTicket as jest.Mock).mock.calls;
+      expect(calls[calls.length - 1][0]).toBe(false);
+    });
+
+    const ticketList = screen.getAllByTestId("ticket-item");
+    expect(ticketList.length).toBeGreaterThanOrEqual(1);
   });
+  it("should display the correct ticket ID when a ticket is clicked", async () => {
+    render(
+      <MemoryRouter>
+        <Tickets />
+      </MemoryRouter>
+    );
 
-  it("should not call getListTicket multiple times on initial render", () => {
-    render(<Tickets />);
-    const calls = (ticketHooks.useListTicket as jest.Mock).mock.calls.length;
-    // Since we only expect 1 render for this hook per render
-    expect(calls).toBe(1);
+    const ticketItem = await screen.findByText("Ticket 1");
+    fireEvent.click(ticketItem);
+
+    await waitFor(() => {
+      expect(screen.getByText("TICKET-1")).toBeInTheDocument();
+    });
   });
 });

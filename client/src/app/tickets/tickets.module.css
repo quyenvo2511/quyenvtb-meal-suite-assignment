@@ -1,8 +1,10 @@
 .header {
   position: sticky;
   top: 0;
-  background: var(--ds-background-white, white);
   z-index: 3;
+
+  background: var(--ds-background-white, white);
+
   border-bottom: var(--spacing-xs, 0.1rem) solid
     var(--ds-background-prepare-option, #e1dfde);
 }
@@ -51,6 +53,7 @@
   border: 1px solid var(--ds-background-prepare-option, #e1dfde);
   border-radius: 8px;
   padding: var(--spacing-ml, 0.8rem);
+
   cursor: pointer;
 
   display: flex;
@@ -73,6 +76,7 @@
 .ticket-item-container_status {
   flex: 1;
 }
+
 .ticket-item-container_assignee {
   flex: 1;
   display: flex;
@@ -81,7 +85,7 @@
 }
 
 .ticket-item-create {
-  border: 1px solid gray;
+  border: var(--spacing-xs, 0.1rem) solid var(--ds-border, #bfbaba);
   border-radius: 8px;
   cursor: pointer;
 

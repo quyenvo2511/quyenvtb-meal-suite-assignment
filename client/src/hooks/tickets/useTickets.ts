@@ -1,5 +1,5 @@
 import { Ticket } from "@acme/shared-models";
-import { useUserContext } from "client/src/providers/userContext";
+import { useUserContext } from "client/src/providers/UserContext";
 import {
   createATicket,
   getListTicket,
@@ -37,7 +37,7 @@ export const useListTicket = (completedFilter: boolean | null) => {
           const user = users.find((u) => u.id === ticket.assigneeId);
           return {
             ...ticket,
-            assigneeName: user?.name ?? "",
+            assigneeName: user?.name ?? "Unassign",
           };
         });
 

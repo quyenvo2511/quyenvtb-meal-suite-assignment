@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@acme/shared-models";
 import { getListUser } from "client/src/services/user.services";
 import { TOption } from "client/src/types/tickets.model";
+import Avatar from "boring-avatars";
 
 type UserContextType = {
   users: User[];
@@ -29,6 +30,12 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
           result.map((user) => ({
             label: user.name,
             value: user.id,
+            display: (
+              <div className="ava-user-container">
+                <Avatar variant="beam" size="30px" name={user.name} />
+                {user.name}
+              </div>
+            ),
           }))
         );
       }
