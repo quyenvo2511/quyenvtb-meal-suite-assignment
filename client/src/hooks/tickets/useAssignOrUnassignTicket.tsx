@@ -1,4 +1,3 @@
-import { useUserContext } from "client/src/providers/userContext";
 import {
   assignTicket,
   unassignTicket,
@@ -6,6 +5,8 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { TicketWithAssignee } from "./useTickets";
+import { useUserContext } from "client/src/providers/UserContext";
+import Avatar from "boring-avatars";
 
 export const useAssignOrUnassignTicket = (
   ticket: TicketWithAssignee | null,
@@ -35,8 +36,10 @@ export const useAssignOrUnassignTicket = (
     try {
       if (nextAssignee === -1) {
         await unassignTicket({ ticketId });
+        toast.warn("The ticket has been unassigned.");
       } else {
         await assignTicket({ ticketId, userId: nextAssignee });
+        toast.success("The ticket has been successfully assigned.");
       }
     } catch (err) {
       setLocalAssigneeId(prevAssignee);
@@ -47,7 +50,19 @@ export const useAssignOrUnassignTicket = (
   };
 
   const options = useMemo(
-    () => [{ label: "Unassign", value: -1 }, ...userOptions],
+    () => [
+      {
+        label: "Unassign",
+        value: -1,
+        display: (
+          <div className="ava-user-container">
+            <Avatar variant="beam" size="30px" name="Unassign" />
+            Unassign
+          </div>
+        ),
+      },
+      ...userOptions,
+    ],
     [userOptions]
   );
 

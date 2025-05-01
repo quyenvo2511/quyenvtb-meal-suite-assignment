@@ -1,0 +1,35 @@
+.tag {
+  display: inline-block;
+  text-align: center;
+
+  padding: var(--spacing-s, 0.3rem) var(--spacing-m, 0.7rem);
+  border-radius: var(--spacing-m, 0.7rem);
+
+  font-weight: 500;
+  font-size: var(--font-size-xs, 0.8rem);
+
+  transition: all 0.3s ease;
+}
+
+.todo {
+  color: var(--ds-text-prepare-option, #434140);
+  background-color: var(--ds-background-prepare-option, #e1dfde);
+
+  font-size: var(--font-size-xs, 1rem);
+  font-weight: 600;
+}
+
+.completed {
+  color: var(--ds-text-success, #53c453);
+  background-color: var(--ds-background-success, #c5eac3);
+
+  font-size: var(--font-size-xs, 1rem);
+  font-weight: 600;
+}
+
+.all {
+  color: var(--ds-text-bold, #a451dc);
+
+  font-size: var(--font-size-s, 2rem);
+  font-weight: 600;
+}

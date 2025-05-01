@@ -11,6 +11,6 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <App />
-    <ToastContainer />
+    <ToastContainer position="top-center" autoClose={3000} />
   </BrowserRouter>
 );

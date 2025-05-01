@@ -1,3 +1,5 @@
+import { User } from "@acme/shared-models";
+
 type TTicketDetailRequest = {
   id: number;
 };
@@ -31,11 +33,12 @@ type TUseCreateTicket = {
 type TOption = {
   label: string;
   value: any;
-  textMainColor?: string;
-  textReverseColor?: string;
-  bgColor?: string;
   display?: React.ReactNode;
 };
+
+interface IUserWithDisplay extends User {
+  display?: React.ReactNode;
+}
 
 export {
   TTicketDetailRequest,
@@ -45,4 +48,5 @@ export {
   TAssignTicketRequest,
   TUnassignTicketRequest,
   TMarkTicketRequest,
+  IUserWithDisplay,
 };

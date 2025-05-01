@@ -6,6 +6,7 @@ import { TMarkTicketRequest } from "client/src/types/tickets.model";
 import { useEffect, useMemo, useState } from "react";
 import { TicketWithAssignee } from "./useTickets";
 import { ticketOptions } from "client/src/constants/ticket.constants";
+import { toast } from "react-toastify";
 
 export const useTicketStatus = (
   ticket: TicketWithAssignee | null,
@@ -29,7 +30,6 @@ export const useTicketStatus = (
     const previousStatus = completed;
     const optimisticStatus = selected.value;
 
-    // Optimistically update
     setCompleted(optimisticStatus);
     setUpdating(true);
 
@@ -37,8 +37,10 @@ export const useTicketStatus = (
       const payload: TMarkTicketRequest = { ticketId: id };
       if (optimisticStatus) {
         await markTicketComplete(payload);
+        toast.success("Ticket marked as COMPLETED.");
       } else {
         await markTicketTodo(payload);
+        toast.info("Ticket marked as TO DO.");
       }
     } catch (error) {
       // Revert if failed
