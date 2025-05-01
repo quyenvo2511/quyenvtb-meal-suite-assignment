@@ -8,22 +8,6 @@ export const useUserList = () => {
   const [options, setOptions] = useState<TOption[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // const unassignOption = useMemo<TOption>(
-  //   () => ({
-  //     label: "Unassign",
-  //     value: item.id,
-  //   }),
-  //   [item.id]
-  // );
-
-  // const handleChange = async (selected: TOption) => {
-  //   if (selected.value === unassignOption.value) {
-  //     await unassign(item.id);
-  //   } else {
-  //     await unassign(item.id, selected.value as number);
-  //   }
-  // };
-
   const fetchUsers = async () => {
     setLoading(true);
     try {

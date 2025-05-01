@@ -3,6 +3,7 @@ import { TRouteConfig } from "../config/routeConfig";
 import { ROUTING_PATHS } from "../config/routing";
 import TicketDetail from "./tickets/TicketDetail";
 import Tickets from "./tickets/tickets";
+import { UserProvider } from "../providers/userContext";
 
 const TicketsLayout = () => {
   return <Outlet />;
@@ -11,7 +12,11 @@ const TicketsLayout = () => {
 export const routes: TRouteConfig[] = [
   {
     path: ROUTING_PATHS.HOME,
-    element: <TicketsLayout />,
+    element: (
+      <UserProvider>
+        <TicketsLayout />
+      </UserProvider>
+    ),
     children: [
       {
         index: true,

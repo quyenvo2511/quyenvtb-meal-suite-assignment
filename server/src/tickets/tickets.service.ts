@@ -26,22 +26,8 @@ export class TicketsService {
 
   constructor(private usersService: UsersService) {}
 
-  async tickets(): Promise<(Ticket & { assigneeName?: string })[]> {
-    const enrichedTickets = await Promise.all(
-      this.storedTickets.map(async (ticket) => {
-        const assignee =
-          ticket.assigneeId != null
-            ? await this.usersService.user(ticket.assigneeId)
-            : null;
-
-        return {
-          ...ticket,
-          assigneeName: assignee?.name ?? null,
-        };
-      })
-    );
-
-    return enrichedTickets;
+  async tickets(): Promise<Ticket[]> {
+    return this.storedTickets;
   }
 
   async ticket(id: number): Promise<Ticket | null> {

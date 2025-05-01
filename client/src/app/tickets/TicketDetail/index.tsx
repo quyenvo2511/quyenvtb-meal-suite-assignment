@@ -14,6 +14,7 @@ const TicketDetail = () => {
   const { ticket, loading } = useTicketDetail({ id: numericId });
   const { selectedStatus, filteredTicketOptions, handleChangeStatus } =
     useTicketStatus(ticket, numericId);
+
   const { options, selectedAssignee, handleAssigneeChange } =
     useAssignOrUnassignTicket(ticket, numericId);
 

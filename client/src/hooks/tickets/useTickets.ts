@@ -1,4 +1,5 @@
 import { Ticket } from "@acme/shared-models";
+import { useUserContext } from "client/src/providers/userContext";
 import {
   createATicket,
   getListTicket,
@@ -19,7 +20,10 @@ export const useListTicket = (completedFilter: boolean | null) => {
   const [loading, setLoading] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
+  const { users } = useUserContext();
+
   const fetchTickets = async () => {
+    if (!users || users.length === 0) return;
     setLoading(true);
     try {
       const data = await getListTicket();
@@ -28,17 +32,28 @@ export const useListTicket = (completedFilter: boolean | null) => {
           completedFilter === null
             ? data
             : data.filter((ticket) => ticket.completed === completedFilter);
-        setTickets(filtered);
+
+        const enriched = filtered.map((ticket) => {
+          const user = users.find((u) => u.id === ticket.assigneeId);
+          return {
+            ...ticket,
+            assigneeName: user?.name ?? "",
+          };
+        });
+
+        setTickets(enriched);
       }
     } finally {
       setLoading(false);
-      setIsFirstLoad(false); // sau khi lần load đầu xong thì flag này sẽ false
+      setIsFirstLoad(false);
     }
   };
 
   useEffect(() => {
-    fetchTickets();
-  }, [completedFilter]);
+    if (users.length > 0) {
+      fetchTickets();
+    }
+  }, [completedFilter, users]);
 
   return { tickets, loading, isFirstLoad, refetch: fetchTickets };
 };

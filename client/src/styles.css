@@ -14,6 +14,7 @@ body {
   --ds-text-secondary: #777272;
   --ds-text-prepare-option: #434140;
   --ds-text-success: #53c453;
+  --ds-text-not-found: #d9d9d9;
 
   --ds-background-disabled: #091e420f;
   --ds-background-prepare-option: #e1dfde;
@@ -29,6 +30,7 @@ body {
   --spacing-ml: 0.8rem;
   --spacing-l: 0.9rem;
   --spacing-xl: 1rem;
+  --spacing-xxl: 2rem;
 
   --sizing-s: 1rem;
   --sizing-m: 2rem;
