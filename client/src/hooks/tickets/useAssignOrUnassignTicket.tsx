@@ -7,6 +7,10 @@ import { toast } from "react-toastify";
 import { TicketWithAssignee } from "./useTickets";
 import { useUserContext } from "client/src/providers/UserContext";
 import Avatar from "boring-avatars";
+import {
+  AssigneeValue,
+  UNASSIGNED,
+} from "client/src/constants/ticket.constants";
 
 export const useAssignOrUnassignTicket = (
   ticket: TicketWithAssignee | null,
@@ -52,12 +56,12 @@ export const useAssignOrUnassignTicket = (
   const options = useMemo(
     () => [
       {
-        label: "Unassign",
-        value: -1,
+        label: UNASSIGNED,
+        value: AssigneeValue.UNASSIGNED,
         display: (
           <div className="ava-user-container">
-            <Avatar variant="beam" size="30px" name="Unassign" />
-            Unassign
+            <Avatar variant="beam" size="30px" name={UNASSIGNED} />
+            {UNASSIGNED}
           </div>
         ),
       },

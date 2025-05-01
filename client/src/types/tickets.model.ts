@@ -40,6 +40,12 @@ interface IUserWithDisplay extends User {
   display?: React.ReactNode;
 }
 
+export enum TicketStatusFilter {
+  ALL = "ALL",
+  COMPLETED = "COMPLETED",
+  TODO = "TODO",
+}
+
 export {
   TTicketDetailRequest,
   TCreateTicketRequest,
