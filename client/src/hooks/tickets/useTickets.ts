@@ -6,6 +6,7 @@ import {
   getTicketDetail,
 } from "client/src/services/tickets.services";
 import {
+  TicketStatusFilter,
   TTicketDetailRequest,
   TUseCreateTicket,
 } from "client/src/types/tickets.model";
@@ -15,47 +16,62 @@ export interface TicketWithAssignee extends Ticket {
   assigneeName?: string;
 }
 
-export const useListTicket = (completedFilter: boolean | null) => {
+export const useListTicket = (statusFilter: TicketStatusFilter) => {
   const [tickets, setTickets] = useState<TicketWithAssignee[]>([]);
   const [loading, setLoading] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-  const { users } = useUserContext();
+  const { users, loading: isUserLoading } = useUserContext();
 
-  const fetchTickets = async () => {
-    if (!users || users.length === 0) return;
+  const fetchTickets = useCallback(async () => {
+    if (isUserLoading || !users || users.length === 0) return;
+
     setLoading(true);
+
     try {
       const data = await getListTicket();
-      if (data) {
-        const filtered =
-          completedFilter === null
-            ? data
-            : data.filter((ticket) => ticket.completed === completedFilter);
 
-        const enriched = filtered.map((ticket) => {
-          const user = users.find((u) => u.id === ticket.assigneeId);
-          return {
-            ...ticket,
-            assigneeName: user?.name ?? "Unassign",
-          };
-        });
-
-        setTickets(enriched);
+      let filtered = data;
+      if (statusFilter === TicketStatusFilter.COMPLETED) {
+        filtered = data.filter((t) => t.completed === true);
+      } else if (statusFilter === TicketStatusFilter.TODO) {
+        filtered = data.filter((t) => t.completed === false);
       }
+
+      const enriched = filtered.map((ticket) => {
+        const user = users.find((u) => u.id === ticket.assigneeId);
+
+        let assigneeName = "Unassigned";
+        if (user?.name) {
+          assigneeName = user.name;
+        } else if (ticket.assigneeId !== null) {
+          assigneeName = `User-${ticket.assigneeId}`;
+        }
+
+        return {
+          ...ticket,
+          assigneeName,
+        };
+      });
+
+      setTickets(enriched);
     } finally {
       setLoading(false);
       setIsFirstLoad(false);
     }
-  };
+  }, [statusFilter, users, isUserLoading]);
 
   useEffect(() => {
-    if (users.length > 0) {
-      fetchTickets();
-    }
-  }, [completedFilter, users]);
+    // Khi statusFilter hoặc users thay đổi, fetch lại tickets
+    fetchTickets();
+  }, [statusFilter, users, fetchTickets]);
 
-  return { tickets, loading, isFirstLoad, refetch: fetchTickets };
+  return {
+    tickets,
+    loading,
+    isFirstLoad,
+    refetch: fetchTickets,
+  };
 };
 
 export const useCreateTicket = (onCreated?: () => void): TUseCreateTicket => {
@@ -76,7 +92,7 @@ export const useCreateTicket = (onCreated?: () => void): TUseCreateTicket => {
       await createATicket({ description });
       cancelCreating();
       onCreated?.();
-      toast.success("You just created a ticket successful!");
+      toast.success("You just created a ticket successfully!");
     } catch (error) {
       console.error("Failed to create ticket:", error);
       setIsCreating(false);

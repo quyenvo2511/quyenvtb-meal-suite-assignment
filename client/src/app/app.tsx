@@ -10,16 +10,17 @@ const App = () => {
   useLayoutEffect(() => {
     const updateFontSize = () => {
       const maxWidth = 1920;
-      const minWidth = 1420;
+      const minWidth = 375;
+      const baseWidth = 1420;
 
       const innerWidth = Math.max(
         minWidth,
         Math.min(window.innerWidth, maxWidth)
       );
-      const baseWidth = 1420;
       const vw = innerWidth / baseWidth;
 
-      document.documentElement.style.fontSize = `${vw * 16}px`;
+      const fontSize = Math.max(12, vw * 16);
+      document.documentElement.style.fontSize = `${fontSize}px`;
     };
 
     updateFontSize();
@@ -27,6 +28,7 @@ const App = () => {
 
     return () => window.removeEventListener("resize", updateFontSize);
   }, []);
+
   return (
     <div className={styles["app"]}>
       <Suspense fallback={<LoadingSpin />}>

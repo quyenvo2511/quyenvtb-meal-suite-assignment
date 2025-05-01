@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 import styles from "../tickets.module.css";
 import Avatar from "boring-avatars";
+import { UNASSIGNED } from "client/src/constants/ticket.constants";
 
 interface ITicketItemProps {
   item: TicketWithAssignee;
@@ -51,7 +52,7 @@ const TicketItem = ({ item }: ITicketItemProps) => {
         <Avatar
           variant="beam"
           size="30px"
-          name={item.assigneeName ?? "Unassign"}
+          name={item.assigneeName ?? UNASSIGNED}
         />{" "}
         {item.assigneeName}
       </div>

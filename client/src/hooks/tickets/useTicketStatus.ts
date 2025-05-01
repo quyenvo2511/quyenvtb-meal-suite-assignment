@@ -2,10 +2,18 @@ import {
   markTicketComplete,
   markTicketTodo,
 } from "client/src/services/tickets.services";
-import { TMarkTicketRequest } from "client/src/types/tickets.model";
+import {
+  TicketStatusFilter,
+  TMarkTicketRequest,
+} from "client/src/types/tickets.model";
 import { useEffect, useMemo, useState } from "react";
 import { TicketWithAssignee } from "./useTickets";
-import { ticketOptions } from "client/src/constants/ticket.constants";
+import {
+  booleanToTicketStatus,
+  ticketOptions,
+  ticketStatusOptions,
+  ticketStatusToBoolean,
+} from "client/src/constants/ticket.constants";
 import { toast } from "react-toastify";
 
 export const useTicketStatus = (
@@ -23,12 +31,12 @@ export const useTicketStatus = (
 
   const handleChangeStatus = async (selected: {
     label: string;
-    value: boolean;
+    value: TicketStatusFilter;
   }) => {
     if (!ticket) return;
 
     const previousStatus = completed;
-    const optimisticStatus = selected.value;
+    const optimisticStatus = ticketStatusToBoolean(selected.value);
 
     setCompleted(optimisticStatus);
     setUpdating(true);
@@ -53,7 +61,9 @@ export const useTicketStatus = (
 
   const selectedStatus = useMemo(() => {
     return (
-      ticketOptions.find((opt) => opt.value === completed) ?? ticketOptions[1]
+      ticketStatusOptions.find(
+        (opt) => opt.value === booleanToTicketStatus(completed)
+      ) ?? ticketStatusOptions[1]
     );
   }, [completed]);
 
