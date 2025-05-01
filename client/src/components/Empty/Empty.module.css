@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--spacing-xxl, 2rem);
+  color: var(--ds-text-not-found, #d9d9d9);
+}
+
+.container_text {
+  font-size: var(--font-size-s, 1rem);
+
+  margin: 0;
+}

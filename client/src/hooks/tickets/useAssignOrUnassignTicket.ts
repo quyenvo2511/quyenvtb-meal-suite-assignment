@@ -1,9 +1,9 @@
-import { getListUser } from "client/src/services/user.services";
-import { useEffect, useMemo, useState } from "react";
+import { useUserContext } from "client/src/providers/userContext";
 import {
   assignTicket,
   unassignTicket,
 } from "client/src/services/tickets.services";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { TicketWithAssignee } from "./useTickets";
 
@@ -11,21 +11,9 @@ export const useAssignOrUnassignTicket = (
   ticket: TicketWithAssignee | null,
   ticketId: number
 ) => {
-  const [users, setUsers] = useState<{ label: string; value: number }[]>([]);
+  const { options: userOptions, loading: userLoading } = useUserContext();
   const [localAssigneeId, setLocalAssigneeId] = useState<number | null>(null);
   const [updating, setUpdating] = useState(false);
-
-  const fetchUsers = async () => {
-    const res = await getListUser();
-    const mappingUersToOptions = res.map((u) => ({
-      label: u.name,
-      value: u.id,
-    }));
-    setUsers([{ label: "Unassign", value: -1 }, ...mappingUersToOptions]);
-  };
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   useEffect(() => {
     if (ticket) {
@@ -58,15 +46,20 @@ export const useAssignOrUnassignTicket = (
     }
   };
 
+  const options = useMemo(
+    () => [{ label: "Unassign", value: -1 }, ...userOptions],
+    [userOptions]
+  );
+
   const selectedAssignee = useMemo(() => {
-    return users.find((u) => u.value === localAssigneeId) ?? users[0];
-  }, [users, localAssigneeId]);
+    return options.find((u) => u.value === localAssigneeId) ?? options[0];
+  }, [options, localAssigneeId]);
 
   return {
-    options: users,
+    options,
     selectedAssignee,
     handleAssigneeChange,
-    loading: updating,
+    loading: updating || userLoading,
     ticket,
   };
 };
